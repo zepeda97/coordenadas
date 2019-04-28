@@ -1,0 +1,82 @@
+# de una distancia y rumbo  obtienes un archivo csv de las coordenadas y una imagen del poligono
+# se importan las librerias necesarias para que este programa funcione
+import math
+import matplotlib.pyplot as plt
+import csv
+l=input("cuantos vertices tiene tu poligono: ")
+aa=input("introduce el numero 1 si tu poligonal es cerrada, de lo contrario introduce 2: ")   
+a=input("Introduce tu corrdenada inicial en x: ")
+b=input("Introduce tu coordenada inicial en y: ")
+# empleas una variable libre para guardar las proyecciones "x" y "y"
+c=[]
+d=[]
+# creas un bucle para que repita el procedimiento de las proyecciones  segun los vertices empleados
+for i in range (0,l):
+    distancia=float(input("distancia: ",))
+    g=int(input("Introduce los grados: ",))
+    m=int(input("Introduce los minutos: ",))
+    s=float(input("Introduce los segundos: ",))
+    grados = g + (m / 60.0) + (s / 3600.0)
+    radianes=math.radians(grados)
+    px1=float(distancia*math.sin(radianes))
+    py1=float(distancia*math.cos(radianes))
+    px=round(px1,3)
+    py=round(py1,3)
+    print "¿W o E?: "
+    e=raw_input()
+    if e == "W" :
+        f=[-px]
+    else:
+        f=[px]
+    print "¿N o S?: "
+    g=raw_input()
+    if g == "N" :
+        h=[py]
+    else:
+        h=[-py]
+    # esto funciona para ir guardando el resultado en una lista
+    j=(c+f)
+    c=j
+    k=(d+h)
+    d=k
+# calculas las corrdenadas de cada punto dependiendo de los vertices
+# para que no se altere la coordenada original  se crearon copias (t) y (u)
+t=a
+u=b
+n=[a]
+for i in range(len(j)-1):
+    j[i]=j[i]
+    o=t+j[i]
+    t=o
+    n.append(o)
+p=[b]
+for i in range(len(k)-1):
+    k[i]=k[i]
+    q=u+k[i]
+    u=q
+    p.append(q)
+#creas el archivo csv apartir de las listas de coordenadas creadas
+r=[]
+for i in range(len(j)):
+    s={"x":n[i],"y":p[i]}
+    r.append(s)
+with open ("coordenadas1.csv", "wb") as f:
+    w= csv.DictWriter(f,r[0].keys())
+    w.writeheader()
+    for coord in r:
+        w.writerow(coord)
+print("csv creado")
+if  aa == 1 :
+    n.append(a)
+    p.append(b)
+else :
+    n=n
+    p=p
+# realiza la imagen del poligono que se requiere
+x=n
+y=p
+plt.plot(x,y)
+plt.xlabel('eje x')
+plt.ylabel('eje y')
+plt.title('dibujo de poligonal de apoyo')
+plt.show()
